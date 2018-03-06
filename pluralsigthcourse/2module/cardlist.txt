@@ -1,0 +1,105 @@
+//https://github.com/jordwalke main idea of react
+const Card = (props) => 
+  {
+    // //react we need to use className propperty,
+    return (
+     <div style={{margin: '1em'}}>
+     <img width="75" src={props.avatar_url} />
+   
+     <div style={{display: 'inline-block', marginLeft: 10}}>
+     <div style={{display: 'inline-block', fontWeight: 'bold'}}> {props.name}</div>
+     <div> {props.company} </div>
+     </div>
+     </div>
+    );
+  };
+  
+  
+  ///  <Card {...card} /> spread operatos. 
+  //https://zhenyong.github.io/react/docs/jsx-spread.html
+  const CardList = (props) => 
+  {
+    return (
+       <div>
+         {props.cards.map(card => <Card key={card.id} {...card} />)}
+      
+       </div>
+    );
+  };
+  
+  class Form extends React.Component {
+   constructor(props)
+   {
+   super(props);
+   this.state = {
+    userName : ''
+   };
+   }
+   
+    submitted = (event) =>
+    {
+      event.preventDefault();
+      console.log('event: Form Submit',this.state.userName);
+      var url =`https://api.github.com/users/${this.state.userName}`;
+      console.log(url);
+      axios.get(url).then(
+      resp => {
+      console.log('get');
+      this.props.pasameelvalor(resp.data);
+      this.setState({userName : ''});
+      }
+      );
+    };
+    render()
+    {
+     return (
+          <form onSubmit={this.submitted}>
+              <input type="text"
+              value={this.userName}
+              onChange ={(event) => this.setState({ userName: event.target.value }) }
+              placeholder="Github username" />
+              <button type="submit">Add card </button>
+          </form>
+     );
+    }
+  }
+ 
+  class App extends React.Component 
+  {
+  constructor(props)
+  {
+    super(props);
+    this.state = {
+      cards : [
+  
+  {name :"Lorenzo Brito" , avatar_url:"https://avatars2.githubusercontent.com/u/3053824?v=4", company:"nearshore" },
+  
+  ]
+    
+    };
+  }
+  addNewCard = (cardInfo) =>
+  {
+    console.log(cardInfo);
+    this.setState(
+       prevState => (
+       {
+       cards : prevState.cards.concat(cardInfo)
+       }
+       )
+    );
+  };
+  
+      render()
+      {
+      
+       return (
+            <div>
+               <Form pasameelvalor={this.addNewCard} />
+               <CardList cards={this.state.cards} />
+            </div>
+       );
+      }
+  }
+  
+  ReactDOM.render(<App />,mountNode);
