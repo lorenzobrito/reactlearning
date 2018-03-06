@@ -1,0 +1,63 @@
+class Button extends React.Component 
+{
+propiaFuntion = () => {
+    
+this.props.onClickFuntion(this.props.incrementValue)
+}
+
+//when we use the bind method or the funtion wrapper method, we´re actually creating 
+//a new funtion for every rendered method. 
+//<button onClick={()=> this.props.onClickFuntion(this.props.incrementValue)} >//{this.props.incrementValue}  </button>
+//
+
+render () {
+  return (<button onClick={this.propiaFuntion} >{this.props.incrementValue}  </button>);
+}
+}
+
+class Result extends React.Component
+{
+render() {
+ return (<h1> Counter => {this.props.counter} </h1>);
+}
+}
+
+class App extends React.Component
+{
+  constructor(props)
+  {
+       super(props);
+       this.state = { counter : 0 };
+  }
+handleClick = (number) => {
+    this.setState((prevState) => ({
+     counter: prevState.counter + number
+    
+    }) );
+
+}
+reset = () => {
+    this.setState((prevState) => ({
+     counter: 0
+    
+    }) );
+
+}
+
+render() {
+    return (
+     <div>
+     <Button incrementValue={1} onClickFuntion={this.handleClick} />
+     <Button incrementValue={2} onClickFuntion={this.handleClick} />
+     <Button incrementValue={3} onClickFuntion={this.handleClick} />
+     <Button incrementValue={4} onClickFuntion={this.handleClick} />
+     <Button incrementValue={5} onClickFuntion={this.handleClick} />  
+     <button onClick={this.reset} >Reset</button>
+    <Result  counter={this.state.counter} />
+     </div>
+   
+    );
+}
+}
+
+ReactDOM.render(<App />,mountNode);
